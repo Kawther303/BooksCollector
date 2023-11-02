@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Book Detail</h1>
+
+<div class="card">
+
+<div class="card-content">
+  <!-- add image -->
+<div class="flex-container"> 
+
+  <div>
+<span class="card-title">{{book.name}}</span>
+<p>Author: {{book.author}}</p>
+<p>Description: {{book.description}}</p>
+
+<p>{{book.release_year}}</p>
+
+ </div>
+ <div> 
+  {% load static  %}
+<img width="100px" height="100px" src="{% static book.image|cut:'main_app/static/' %}" />
+</div>
+</div>
+</div>  
+
+</div>
+
+
+{% endblock %}

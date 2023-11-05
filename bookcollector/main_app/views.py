@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Book
+from django.views.generic.edit import CreateView,UpdateView,DeleteView
+
 # # Create your views here.
 
 # class Book:
@@ -14,6 +16,18 @@ from .models import Book
 #   Book('xxxx','ccc','Histical Novel',2022),
 #   Book('111we','vvv','Story',2020)
 # ]
+
+class BookCreate(CreateView):
+  model=Book
+  fields='__all__'
+
+class BookUpdate(UpdateView):
+  model=Book
+  fields=['description','release_year']
+
+class BookDelete(DeleteView):
+  model=Book
+  success_url = '/books/'
 
 def home(request):  
   return render(request, 'index.html')

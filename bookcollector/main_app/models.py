@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 from django.db import models
@@ -11,4 +12,6 @@ class Book(models.Model):
   description = models.TextField(max_length=200)
   release_year = models.IntegerField()
   image= models.ImageField(upload_to = "main_app/static/uploads", default= "" )
+  def get_absolute_url(self):
+    return reverse('detail', kwargs={'book_id': self.id})
 

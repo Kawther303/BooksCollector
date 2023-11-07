@@ -8,11 +8,10 @@
   <!-- add image -->
 <div class="flex-container"> 
 
-  <div>
+<div>
 <span class="card-title">{{book.name}}</span>
 <p>Author: {{book.author}}</p>
 <p>Description: {{book.description}}</p>
-
 <p>{{book.release_year}}</p>
 <!-- -------------to add update -- -->
 <div class="card-action">
@@ -29,6 +28,103 @@
 </div>  
 
 </div>
-
+<div>
+  <form method="post" action="{% url 'add_review' book.id %}">
+    {% csrf_token %}
+    {{ review_form.as_p }}
+    <input type="submit" class="btn" value="Add Review">
+      </form>
+    {% if book.well_review > 3 %}
+      <div class="card-panel teal-text center-align"> {{book.name}} have high Rate </div>
+      {% else %}
+      <div class="card-panel red-text center-align">
+    {{ book.name }} might be not that good
+      </div>
+      {% endif %}
+  <table class="striped">
+  <thead>
+    <tr>
+      <th>
+        Date
+      </th>
+      <th>Rate</th>
+      <th>Review</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in book.review_set.all %}
+    <tr>
+      <td>
+        {{ review.date }}
+      </td>
+      <td>{{ review.get_rate_display }}</td>
+      <td>{{ review.review }}</td>
+    </tr>
+   {% endfor %}
+  
+  </tbody>
+  
+  </table>
+  
+  </div>
+<!-- ========================= -->
+<div class="row">
+  <div class="col s6">
+    <h3> {{ book.name }}'s Rewards</h3>
+    {% if book.rewards.count %}
+      {% for reward in book.rewards.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            A <span style="color:blueviolet">{{ reward.name }}</span> {{ reward.provider }}
+          </span>
+        </div>
+        <div class="card-action">
+          <form action="{% url 'unassoc_reward' book.id reward.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn">Remove</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+    <h5>No Rewards! </h5>
+    {% endif %}
+  </div>
+  <div class="col s6">
+    <h3>Available Rewards</h3>
+    {% if rewards.count %}
+      {% for reward in rewards.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              A <span style="color:blueviolet">{{ reward.name }}</span> {{ reward.provider }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_reward' book.id reward.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+      {% endfor%}
+    {% else %}
+      <h5>{{ book.name }} Already has all the rewards! </h5>
+    {% endif %}
+  </div>
+</div>
+<!-- ========================= -->
+  <script>
+    let dateEle = document.getElementById('id_date');
+    M.Datepicker.init(dateEle, {format: 'yyyy-mm-dd',   defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    })  
+    let reviewEle = document.getElementById('id_rate');
+    M.FormSelect.init(reviewEle);
+    
+    
+    </script>  
 
 {% endblock %}

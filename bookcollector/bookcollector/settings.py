@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+#import connection data
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,9 +83,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         # 'HOST' : 'flora.db.elephantsql.com',
         # 'PORT' : 5432,
-        'USER' : 'kawther',
+        # 'USER' : 'kawther',
         # 'PASSWORD': 'OUqHald7zBXCJBhS3XOc3doNYra_7eDj',
-        'NAME': 'bookscollector',
+        # 'NAME': 'bookscollector',
+        'USER' : os.getenv('DATABASEUSER'),
+        'NAME':  os.getenv('DATABASENAME'), 
     }
 }
 
@@ -121,6 +127,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+#----auth
+LOGIN_REDIRECT_URL = '/books/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
